@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 
 import { useState } from 'react';
-
 import { apiCall } from '../utils/api';
 
 export default SearchBar = () => {
