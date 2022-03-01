@@ -1,16 +1,17 @@
-// import { LISTEN_API_URL, LISTEN_API_KEY } from '@env';
+import { LISTEN_API_KEY, LISTEN_API_URL } from '@env';
 const { Client } = require('podcast-api');
 
 const client = Client({ apiKey: LISTEN_API_KEY });
 
 client.search({
-    q: 'star wars',
+    q: 'true crime',
 }).then((response) => {
     console.log(response.data)
 }).catch(e => console.log(e.message));
 
-// export const apiCall = (q) => {
-//     // console.log(LISTEN_API_URL, LISTEN_API_KEY);
+export const apiCall = (q) => {
+    console.log(LISTEN_API_URL, LISTEN_API_KEY);
+}
 //     console.log(q);
 //     fetch(`${LISTEN_API_URL}/search?q=${q}`, {
 //         method: 'GET',
