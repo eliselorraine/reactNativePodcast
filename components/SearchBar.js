@@ -10,21 +10,29 @@ import { apiCall } from '../utils/api';
 
 export default SearchBar = () => {
     const [query, setQuery] = useState('');
+    const [results, setResults] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (query === '') return;
-
         try {
-            apiCall(query);
+            const searchResults = await apiCall(query);
+            console.log(searchResults);
+            setResults(searchResults);
+            setLoading(false);
+            setError(false);
         } catch (e) {
             console.log(e.message);
+            setLoading(false);
+            setError(true);
         }
     }
 
     return (
         <View>
             <Text style={styles.text}>Search through episodes by topic:</Text>
-            <TextInput 
+            <TextInput
                 style={styles.input}
                 placeholder='Enter topic or keyword...'
                 onChangeText={newQuery => setQuery(newQuery)}

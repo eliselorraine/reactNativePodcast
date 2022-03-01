@@ -3,12 +3,12 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import Logo from './components/Logo';
 import SearchBar from './components/SearchBar';
+import Podcast from './components/Podcast';
 
 export default App = () => {
   return (
     <View style={styles.container}>
-      <Logo />
-      <SearchBar />
+      <Podcast />
     </View>
   );
 }
