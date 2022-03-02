@@ -8,27 +8,7 @@ import {
 import { useState } from 'react';
 import { apiCall } from '../utils/api';
 
-export default SearchBar = () => {
-    const [query, setQuery] = useState('');
-    const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    const handleSubmit = async () => {
-        if (query === '') return;
-        try {
-            const searchResults = await apiCall(query);
-            console.log(searchResults);
-            setResults(searchResults);
-            setLoading(false);
-            setError(false);
-        } catch (e) {
-            console.log(e.message);
-            setLoading(false);
-            setError(true);
-        }
-    }
-
+export default SearchBar = ({ query, setQuery, handleSubmit }) => {
     return (
         <View>
             <Text style={styles.text}>Search through episodes by topic:</Text>
