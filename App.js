@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-
+import { Provider } from 'react-redux';
 import Logo from './components/Logo';
 import SearchBar from './components/SearchBar';
-import Podcast from './components/Podcast';
+import PodcastList from './components/PodcastList';
 
 export default App = () => {
+
   return (
     <View style={styles.container}>
-      <Podcast />
+      <SearchBar />
+      <PodcastList />
     </View>
   );
 }
