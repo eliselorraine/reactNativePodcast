@@ -1,22 +1,66 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+
+// screens
 import PodcastList from './screens/PodcastList';
 import SearchBar from './screens/SearchBar';
 import About from './screens/About';
-import { MaterialIcons } from '@expo/vector-icons';
+
+// icons
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Foundation } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const getSearchIcon = icon => () => (
+    <Ionicons name={icon} size={28} style={{ color: "black" }} />
+)
+
+const getHookIcon = icon => () => (
+    <MaterialCommunityIcons name={icon} size={28} style={{ color: "black" }} />
+)
+
+const getResultsIcon = icon => () => (
+    <Foundation name={icon} size={28} style={{ color: "black" }} />
+)
+
+const SearchScreens = () => {
+    
+}
 
 export default NavBar = () => {
     return (
         <Tab.Navigator
-            initialRouteName='About'
+            initialRouteName='Search'
             options={{
                 tabBarShowLabel: false
             }}
         >
-            <Tab.Screen name='Search' component={SearchBar} />
-            <Tab.Screen name='Results' component={PodcastList} />
-            <Tab.Screen name='About' component={About} />
+            <Tab.Screen
+                name='Search'
+                component={SearchBar}
+                options={{
+                    tabBarIcon: getSearchIcon('search'),
+                    tabBarShowLabel: false,
+                }} />
+            <Tab.Screen
+                name='Results'
+                component={PodcastList}
+                options={{
+                    tabBarIcon: getResultsIcon('results'),
+                    tabBarShowLabel: false,
+                }}
+            />
+            <Tab.Screen
+                name='About'
+                component={About}
+                options={{
+                    tabBarIcon: getHookIcon('hook'),
+                    tabBarShowLabel: false,
+                }}
+            />
         </Tab.Navigator>
     )
 }

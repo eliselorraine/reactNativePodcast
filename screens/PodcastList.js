@@ -68,6 +68,9 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     error: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
         paddingHorizontal: 30,
     },
     text: {

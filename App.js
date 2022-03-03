@@ -1,11 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { useState, useEffect } from 'react';
 import { apiCall } from './utils/api';
-import Logo from './components/Logo';
-import SearchBar from './screens/SearchBar';
-import PodcastList from './screens/PodcastList';
-import About from './screens/About';
 import { NavigationContainer } from '@react-navigation/native';
 import NavBar from './routes';
 
