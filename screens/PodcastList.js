@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { SafeAreaView, FlatList, Text, View, Image, StyleSheet, ActivityIndicator } from 'react-native';
-import Podcast from './Podcast';
+import Podcast from '../components/Podcast';
 import { apiCall } from '../utils/api';
 
-export default PodcastList = () => {
+export default PodcastList = ({ query }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const getPodcasts = async () => {
         try {
-            const searchResults = await apiCall('star wars');
+            const searchResults = await apiCall(query);
             setData(searchResults.results);
             setLoading(false);
         } catch (e) {
@@ -48,7 +48,7 @@ export default PodcastList = () => {
         )
     } else if (loading) {
         return (
-            <View>
+            <View style={styles.container}>
                 <ActivityIndicator size="large" />
             </View>
         )

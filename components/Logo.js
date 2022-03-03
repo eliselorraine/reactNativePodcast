@@ -10,5 +10,6 @@ const styles = StyleSheet.create({
     header: {
         textAlign: 'center',
         fontSize: 25,
+        textDecorationLine: 'underline',
     }
 })

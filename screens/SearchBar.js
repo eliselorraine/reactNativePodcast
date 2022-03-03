@@ -4,13 +4,12 @@ import {
     View,
     TextInput,
 } from 'react-native';
-
-import { useState } from 'react';
-import { apiCall } from '../utils/api';
+import Logo from '../components/Logo';
 
 export default SearchBar = ({ query, setQuery, handleSubmit }) => {
     return (
-        <View>
+        <View style={styles.container}>
+            <Logo />
             <Text style={styles.text}>Search through episodes by topic:</Text>
             <TextInput
                 style={styles.input}
@@ -24,13 +23,19 @@ export default SearchBar = ({ query, setQuery, handleSubmit }) => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        justifyContent: 'center',
+        alignContent: 'center',
+    },
     text: {
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: 20,
+        marginTop: 10,
     },
     input: {
         height: 40,
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: 18,
     }
 })
