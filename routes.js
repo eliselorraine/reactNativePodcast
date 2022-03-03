@@ -9,7 +9,7 @@ import About from './screens/About';
 // icons
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Foundation } from '@expo/vector-icons';
+// import { Foundation } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -22,12 +22,28 @@ const getHookIcon = icon => () => (
     <MaterialCommunityIcons name={icon} size={28} style={{ color: "black" }} />
 )
 
-const getResultsIcon = icon => () => (
-    <Foundation name={icon} size={28} style={{ color: "black" }} />
-)
+// const getResultsIcon = icon => () => (
+//     <Foundation name={icon} size={28} style={{ color: "black" }} />
+// )
 
 const SearchScreens = () => {
-    
+    return (
+        <Stack.Navigator
+            initialRouteName='Search'
+        >
+            <Stack.Screen  
+                name='Search'
+                component={SearchBar}
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen 
+                name='Results' 
+                component={PodcastList}
+            />
+        </Stack.Navigator>
+    )
 }
 
 export default NavBar = () => {
@@ -35,24 +51,26 @@ export default NavBar = () => {
         <Tab.Navigator
             initialRouteName='Search'
             options={{
-                tabBarShowLabel: false
+                tabBarShowLabel: false,
             }}
         >
             <Tab.Screen
-                name='Search'
-                component={SearchBar}
+                name='Search Podcasts'
+                component={SearchScreens}
                 options={{
                     tabBarIcon: getSearchIcon('search'),
                     tabBarShowLabel: false,
-                }} />
-            <Tab.Screen
+                    headerShown: false,
+                }} 
+            />
+            {/* <Tab.Screen
                 name='Results'
                 component={PodcastList}
                 options={{
                     tabBarIcon: getResultsIcon('results'),
                     tabBarShowLabel: false,
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name='About'
                 component={About}

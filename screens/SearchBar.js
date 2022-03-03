@@ -18,11 +18,11 @@ export default SearchBar = ({ navigation }) => {
         if (query === '') return;
         try {
             const searchResults = await apiCall(query);
-            console.log(query);
+            console.log(searchResults);
             setResults(searchResults);
             setLoading(false);
             setError(false);
-            navigation.navigate('Results');
+            navigation.navigate('Results', { query });
         } catch (e) {
             console.log(e.message);
             setLoading(false);

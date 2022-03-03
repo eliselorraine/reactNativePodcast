@@ -3,7 +3,9 @@ import { SafeAreaView, FlatList, Text, View, Image, StyleSheet, ActivityIndicato
 import Podcast from '../components/Podcast';
 import { apiCall } from '../utils/api';
 
-export default PodcastList = ({ query }) => {
+export default PodcastList = ({ navigation }) => {
+    const query = navigation.getState().routes[1].params.query;
+
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
