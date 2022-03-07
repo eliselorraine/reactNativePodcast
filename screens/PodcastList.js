@@ -33,6 +33,8 @@ export default PodcastList = ({ navigation }) => {
                     title={item.title_highlighted}
                     thumbnail={item.thumbnail}
                     description={item.description_highlighted}
+                    audio={item.audio}
+                    publisher={item.podcast.publisher_highlighted}
                 />
             </View>
         )

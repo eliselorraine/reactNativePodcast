@@ -40,6 +40,7 @@ export default SearchBar = ({ navigation }) => {
                 onChangeText={newQuery => setQuery(newQuery)}
                 defaultValue={query}
                 onSubmitEditing={handleSubmit}
+                returnKeyType='search'
             />
         </View>
     )

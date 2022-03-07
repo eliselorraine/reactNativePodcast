@@ -1,14 +1,24 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { useState, useEffect } from 'react';
 import { apiCall } from './utils/api';
 import { NavigationContainer } from '@react-navigation/native';
 import NavBar from './routes';
+import { Audio } from 'expo-av';
 
 export default App = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // const sound = new Audio.Sound();
+  // try {
+  //   await sound.loadAsync(require('./assets/test.mp3'));
+  //   await sound.playAsync();
+  //   await sound.unloadAsync();
+  // } catch (e) {
+  //   console.log(e.message);
+  // }
 
   const handleSubmit = async () => {
     if (query === '') return;
@@ -24,6 +34,12 @@ export default App = () => {
       setError(true);
     }
   }
+
+  // return (
+  //   <View style={styles.container}>
+  //     <Button title="Play Sound" onPress={playSound} />
+  //   </View>
+  // )
 
   return (
     <NavigationContainer>
