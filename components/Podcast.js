@@ -2,11 +2,24 @@ import { Image, StyleSheet, View, Text, Button, useWindowDimensions } from 'reac
 import { useEffect, useState } from 'react';
 import HTML from 'react-native-render-html';
 import { Audio } from 'expo-av';
+import { AntDesign } from '@expo/vector-icons';
 
 
-export default Podcast = ({ title, thumbnail, description, audio }) => {
+export default Podcast = ({ title, thumbnail, description, audio, audioLength }) => {
     const [sound, setSound] = useState(new Audio.Sound());
     const [error, setError] = useState(null);
+    const [playing, setPlaying] = useState(false);
+    const [length, setLength] = useState(audioLength);
+
+    const convertSeconds = (value) => {
+        const minutes = Math.floor(value / 60);
+        let seconds = value % 60 ? value % 60 : '00';
+        if (seconds < 10) {
+            seconds = `0${seconds}`;
+        }
+
+        return minutes + ':' + seconds;
+    }
 
     const setup = async () => {
         Audio.setAudioModeAsync({
@@ -22,6 +35,7 @@ export default Podcast = ({ title, thumbnail, description, audio }) => {
 
     useEffect(() => {
         setup()
+        setLength(convertSeconds(audioLength));
     }, [])
 
     const playSound = async () => {
@@ -34,19 +48,18 @@ export default Podcast = ({ title, thumbnail, description, audio }) => {
             overrideFileExtensionAndroid: '.mp3',
         }
 
-        // maybe we could run the pause function here too, and return the correct icon depending
-
         try {
             const loadStatus = await sound.getStatusAsync();
 
             if (loadStatus.isLoaded) {
                 await sound.playAsync();
+                setPlaying(true);
                 return;
             }
 
             await sound.loadAsync(source, status, false);
             await sound.playAsync();
-
+            setPlaying(true);
         } catch (e) {
             console.log(e.message);
             setError(true);
@@ -56,6 +69,7 @@ export default Podcast = ({ title, thumbnail, description, audio }) => {
     const pauseSound = async () => {
         try {
             await sound.pauseAsync();
+            setPlaying(false);
         } catch (e) {
             console.log(e.message);
             setError(true);
@@ -65,7 +79,7 @@ export default Podcast = ({ title, thumbnail, description, audio }) => {
     const { width } = useWindowDimensions();
 
     return (
-        <View>
+        <View style={styles.row}>
             <HTML
                 contentWidth={width}
                 source={{ html: `<p>${title}</p>` }}
@@ -84,18 +98,36 @@ export default Podcast = ({ title, thumbnail, description, audio }) => {
                     source={{ uri: thumbnail }}
                 />
             </View>
-            {/* {!isPlaying ? */}
-            <View>
-                <Button
-                    title='play sound'
-                    onPress={playSound}
-                />
+            <View style={styles.audioContainer}>
+                {!playing ?
+                    <View>
+                        <AntDesign.Button
+                            title='play sound'
+                            onPress={playSound}
+                            name="playcircleo"
+                            size={30}
+                            color="#147efb"
+                            backgroundColor="transparent"
+                            underlayColor="transparent"
+                            activeOpacity={0.7}
+                        />
+                    </View>
+                    :
+                    <View>
+                        <AntDesign.Button
+                            title='pause sound'
+                            onPress={pauseSound}
+                            name="pausecircleo"
+                            size={30}
+                            color="#147efb"
+                            backgroundColor="transparent"
+                            underlayColor="transparent"
+                            activeOpacity={0.7}
+                        />
+                    </View>
+                }
+                <Text style={styles.length}>{length}</Text>
             </View>
-            {/* : */}
-            <View>
-                <Button title='pause sound' onPress={pauseSound} />
-            </View>
-            {/* } */}
             <HTML
                 contentWidth={width}
                 source={{ html: `<p>${description}</p>` }}
@@ -115,4 +147,18 @@ const styles = StyleSheet.create({
     imageStyle: {
         aspectRatio: 1,
     },
+    row: {
+        padding: 4,
+        borderBottomColor: "#147efb",
+        borderBottomWidth: StyleSheet.hairlineWidth
+    },
+    audioContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+    },
+    length: {
+        fontSize: 17,
+    }
 })

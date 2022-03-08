@@ -35,6 +35,7 @@ export default PodcastList = ({ navigation }) => {
                     description={item.description_highlighted}
                     audio={item.audio}
                     publisher={item.podcast.publisher_highlighted}
+                    audioLength={item.audio_length_sec}
                 />
             </View>
         )
