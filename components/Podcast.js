@@ -6,6 +6,7 @@ import { Audio } from 'expo-av';
 
 export default Podcast = ({ title, thumbnail, description, audio }) => {
     const [sound, setSound] = useState(new Audio.Sound());
+    const [error, setError] = useState(null);
 
     const setup = async () => {
         Audio.setAudioModeAsync({
@@ -18,7 +19,7 @@ export default Podcast = ({ title, thumbnail, description, audio }) => {
             playsThroughEarpieceAndroid: true,
         })
     }
-    
+
     useEffect(() => {
         setup()
     }, [])
@@ -33,22 +34,36 @@ export default Podcast = ({ title, thumbnail, description, audio }) => {
             overrideFileExtensionAndroid: '.mp3',
         }
 
-        const loadStatus = await sound.getStatusAsync();
-        
-        if (loadStatus.isLoaded) {
+        // maybe we could run the pause function here too, and return the correct icon depending
+
+        try {
+            const loadStatus = await sound.getStatusAsync();
+
+            if (loadStatus.isLoaded) {
+                await sound.playAsync();
+                return;
+            }
+
+            await sound.loadAsync(source, status, false);
             await sound.playAsync();
-            return;
+
+        } catch (e) {
+            console.log(e.message);
+            setError(true);
         }
-    
-        await sound.loadAsync(source, status, false);
-        await sound.playAsync();
     }
-    
+
     const pauseSound = async () => {
-        await sound.pauseAsync();
+        try {
+            await sound.pauseAsync();
+        } catch (e) {
+            console.log(e.message);
+            setError(true);
+        }
     }
 
     const { width } = useWindowDimensions();
+
     return (
         <View>
             <HTML
@@ -69,15 +84,18 @@ export default Podcast = ({ title, thumbnail, description, audio }) => {
                     source={{ uri: thumbnail }}
                 />
             </View>
+            {/* {!isPlaying ? */}
             <View>
-                <Button 
-                    title='play sound' 
+                <Button
+                    title='play sound'
                     onPress={playSound}
                 />
             </View>
+            {/* : */}
             <View>
                 <Button title='pause sound' onPress={pauseSound} />
             </View>
+            {/* } */}
             <HTML
                 contentWidth={width}
                 source={{ html: `<p>${description}</p>` }}
