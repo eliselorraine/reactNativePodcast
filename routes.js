@@ -9,7 +9,6 @@ import About from './screens/About';
 // icons
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-// import { Foundation } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -21,10 +20,6 @@ const getSearchIcon = icon => () => (
 const getHookIcon = icon => () => (
     <MaterialCommunityIcons name={icon} size={28} style={{ color: "black" }} />
 )
-
-// const getResultsIcon = icon => () => (
-//     <Foundation name={icon} size={28} style={{ color: "black" }} />
-// )
 
 const SearchScreens = () => {
     return (

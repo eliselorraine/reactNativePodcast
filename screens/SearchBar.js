@@ -18,7 +18,6 @@ export default SearchBar = ({ navigation }) => {
         if (query === '') return;
         try {
             const searchResults = await apiCall(query);
-            // console.log(searchResults);
             setResults(searchResults);
             setLoading(false);
             setError(false);
@@ -29,6 +28,8 @@ export default SearchBar = ({ navigation }) => {
             setError(true);
         }
     }
+
+    // error handling for both 'no search results' and 'technical difficulties'
 
     return (
         <View style={styles.container}>
