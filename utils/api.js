@@ -19,5 +19,12 @@ export const apiCall = (q, offset) => {
     return response; 
 }
 
-
-
+export const fetchPodcastDetails = (id) => {
+    const response = client.fetchPodcastById({
+        id: id,
+        sort: 'recent_first'
+    }).then(data => {
+        return data.data;
+    }).catch(e => console.log(e.message));
+        return response;
+}

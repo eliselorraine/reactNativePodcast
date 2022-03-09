@@ -1,16 +1,16 @@
-import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { Image, StyleSheet, View, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import HTML from 'react-native-render-html';
 import { Audio } from 'expo-av';
 import AudioPlayer from './AudioPlayer';
 import EpisodeTitle from './EpisodeTitle';
 
+// three dots icon, which could either add to your listening list, or see podcast details
 
-export default Podcast = ({ title, thumbnail, description, audio, audioLength }) => {
+export default Podcast = ({ id, navigation, title, thumbnail, description, audio, audioLength }) => {
     const [sound, setSound] = useState(new Audio.Sound());
     const [error, setError] = useState(null);
     const [playing, setPlaying] = useState(false);
-    const [playbackObj, setPlaybackObj] = useState({});
 
     const setup = async () => {
         Audio.setAudioModeAsync({
@@ -40,7 +40,6 @@ export default Podcast = ({ title, thumbnail, description, audio, audioLength })
 
         try {
             const loadStatus = await sound.getStatusAsync();
-            setPlaybackObj(loadStatus);
 
             if (loadStatus.isLoaded) {
                 await sound.playAsync();
@@ -75,6 +74,8 @@ export default Podcast = ({ title, thumbnail, description, audio, audioLength })
             <EpisodeTitle 
                 title={title}
                 width={width}
+                navigation={navigation}
+                id={id}
             />
             <View style={styles.imageStyle}>
                 <Image

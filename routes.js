@@ -3,18 +3,25 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // screens
 import PodcastList from './screens/PodcastList';
+import ListenLater from './screens/ListenLater';
 import SearchBar from './screens/SearchBar';
 import About from './screens/About';
+import PodcastDetails from './screens/PodcastDetails';
 
 // icons
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons'; 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const getSearchIcon = icon => () => (
     <Ionicons name={icon} size={28} style={{ color: "black" }} />
+)
+
+const getListIcon = icon => () => (
+    <Entypo name={icon} size={28} style={{ color: "black" }} />
 )
 
 const getHookIcon = icon => () => (
@@ -37,6 +44,10 @@ const SearchScreens = () => {
                 name='Results' 
                 component={PodcastList}
             />
+            <Stack.Screen 
+                name='Podcast Details' 
+                component={PodcastDetails}
+            />
         </Stack.Navigator>
     )
 }
@@ -58,14 +69,14 @@ export default NavBar = () => {
                     headerShown: false,
                 }} 
             />
-            {/* <Tab.Screen
-                name='Results'
-                component={PodcastList}
+            <Tab.Screen
+                name='Listen Later'
+                component={ListenLater}
                 options={{
-                    tabBarIcon: getResultsIcon('results'),
+                    tabBarIcon: getListIcon('list'),
                     tabBarShowLabel: false,
                 }}
-            /> */}
+            />
             <Tab.Screen
                 name='About'
                 component={About}

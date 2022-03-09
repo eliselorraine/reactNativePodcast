@@ -1,9 +1,14 @@
 import { StyleSheet, View } from 'react-native';
 import HTML from 'react-native-render-html';
+import { Entypo } from '@expo/vector-icons';
 
-export default EpisodeTitle = ({ width, title }) => {
+export default EpisodeTitle = ({ id, navigation, width, title }) => {
+    const details = () => {
+        navigation.navigate('Podcast Details', { id });
+    }
+
     return (
-        <View style={styles.row}>
+        <View style={styles.container}>
             <HTML
                 contentWidth={width}
                 source={{ html: `<p>${title}</p>` }}
@@ -15,14 +20,28 @@ export default EpisodeTitle = ({ width, title }) => {
                     },
                 }}
             />
+            <Entypo.Button
+                name="dots-three-vertical"
+                size={24}
+                color="#147efb"
+                backgroundColor="transparent"
+                underlayColor="transparent"
+                activeOpacity={0.7}
+                onPress={details}
+            />
+
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    row: {
+    container: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         padding: 4,
         borderTopColor: "#147efb",
-        borderTopWidth: StyleSheet.hairlineWidth
+        borderTopWidth: StyleSheet.hairlineWidth,
     },
 })
