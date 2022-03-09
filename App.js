@@ -3,12 +3,17 @@ import { useState, useEffect } from 'react';
 import { apiCall } from './utils/api';
 import { NavigationContainer } from '@react-navigation/native';
 import NavBar from './routes';
+import { Provider } from 'react-redux';
+import store from './utils/redux/store';
+
 
 export default App = () => {
   return (
-    <NavigationContainer>
-      <NavBar />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <NavBar />
+      </NavigationContainer>
+    </Provider>
   )
 }
 
