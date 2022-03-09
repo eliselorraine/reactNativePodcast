@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SafeAreaView, FlatList, Text, View, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { SafeAreaView, FlatList, Text, View, Button, StyleSheet, ActivityIndicator } from 'react-native';
 import Podcast from '../components/Podcast';
 import { apiCall } from '../utils/api';
 
@@ -9,10 +9,11 @@ export default PodcastList = ({ navigation }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [nextOffset, setNextOffset] = useState(0);
 
     const getPodcasts = async () => {
         try {
-            const searchResults = await apiCall(query);
+            const searchResults = await apiCall(query, nextOffset);
             setData(searchResults.results);
             setLoading(false);
         } catch (e) {
@@ -22,9 +23,18 @@ export default PodcastList = ({ navigation }) => {
         }
     }
 
+    // const nextPage = () => {
+    //     setNextOffset(nextOffset + 10);
+    // }
+
+    // const prevPage = () => {
+    //     setNextOffset(nextOffset - 10);
+    // }
+
     useEffect(() => {
         getPodcasts();
-    }, []);
+        // console.log('I am an api call from PodcastList')
+    }, [nextOffset]);
 
     const renderItem = ({ item }) => {
         return (
@@ -44,6 +54,14 @@ export default PodcastList = ({ navigation }) => {
     if (!loading && !error) {
         return (
             <SafeAreaView>
+                {/* <Button
+                    title='next page'
+                    onPress={nextPage}
+                />
+                <Button
+                    title='previous page'
+                    onPress={nextPage}
+                /> */}
                 <FlatList
                     data={data}
                     renderItem={renderItem}

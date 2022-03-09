@@ -1,25 +1,16 @@
-import { Image, StyleSheet, View, Text, Button, useWindowDimensions } from 'react-native';
+import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useEffect, useState } from 'react';
 import HTML from 'react-native-render-html';
 import { Audio } from 'expo-av';
-import { AntDesign } from '@expo/vector-icons';
+import AudioPlayer from './AudioPlayer';
+import EpisodeTitle from './EpisodeTitle';
 
 
 export default Podcast = ({ title, thumbnail, description, audio, audioLength }) => {
     const [sound, setSound] = useState(new Audio.Sound());
     const [error, setError] = useState(null);
     const [playing, setPlaying] = useState(false);
-    const [length, setLength] = useState(audioLength);
-
-    const convertSeconds = (value) => {
-        const minutes = Math.floor(value / 60);
-        let seconds = value % 60 ? value % 60 : '00';
-        if (seconds < 10) {
-            seconds = `0${seconds}`;
-        }
-
-        return minutes + ':' + seconds;
-    }
+    const [playbackObj, setPlaybackObj] = useState({});
 
     const setup = async () => {
         Audio.setAudioModeAsync({
@@ -35,7 +26,6 @@ export default Podcast = ({ title, thumbnail, description, audio, audioLength })
 
     useEffect(() => {
         setup()
-        setLength(convertSeconds(audioLength));
     }, [])
 
     const playSound = async () => {
@@ -50,10 +40,12 @@ export default Podcast = ({ title, thumbnail, description, audio, audioLength })
 
         try {
             const loadStatus = await sound.getStatusAsync();
+            setPlaybackObj(loadStatus);
 
             if (loadStatus.isLoaded) {
                 await sound.playAsync();
                 setPlaying(true);
+                console.log(loadStatus);
                 return;
             }
 
@@ -79,18 +71,10 @@ export default Podcast = ({ title, thumbnail, description, audio, audioLength })
     const { width } = useWindowDimensions();
 
     return (
-        <View style={styles.row}>
-            <HTML
-                contentWidth={width}
-                source={{ html: `<p>${title}</p>` }}
-                tagsStyles={{
-                    p: {
-                        paddingTop: 10,
-                        marginLeft: 10,
-                        fontSize: 18,
-                        fontWeight: 'bold',
-                    },
-                }}
+        <View>
+            <EpisodeTitle 
+                title={title}
+                width={width}
             />
             <View style={styles.imageStyle}>
                 <Image
@@ -98,36 +82,12 @@ export default Podcast = ({ title, thumbnail, description, audio, audioLength })
                     source={{ uri: thumbnail }}
                 />
             </View>
-            <View style={styles.audioContainer}>
-                {!playing ?
-                    <View>
-                        <AntDesign.Button
-                            title='play sound'
-                            onPress={playSound}
-                            name="playcircleo"
-                            size={30}
-                            color="#147efb"
-                            backgroundColor="transparent"
-                            underlayColor="transparent"
-                            activeOpacity={0.7}
-                        />
-                    </View>
-                    :
-                    <View>
-                        <AntDesign.Button
-                            title='pause sound'
-                            onPress={pauseSound}
-                            name="pausecircleo"
-                            size={30}
-                            color="#147efb"
-                            backgroundColor="transparent"
-                            underlayColor="transparent"
-                            activeOpacity={0.7}
-                        />
-                    </View>
-                }
-                <Text style={styles.length}>{length}</Text>
-            </View>
+            <AudioPlayer
+                playSound={playSound}
+                pauseSound={pauseSound}
+                playing={playing}
+                length={audioLength}
+            />
             <HTML
                 contentWidth={width}
                 source={{ html: `<p>${description}</p>` }}
@@ -147,18 +107,25 @@ const styles = StyleSheet.create({
     imageStyle: {
         aspectRatio: 1,
     },
-    row: {
-        padding: 4,
-        borderBottomColor: "#147efb",
-        borderBottomWidth: StyleSheet.hairlineWidth
-    },
-    audioContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 10,
-    },
-    length: {
-        fontSize: 17,
-    }
 })
+
+
+// const statusObj = {
+    // "didJustFinish": false,
+    // "durationMillis": 1693224,
+    // "hasJustBeenInterrupted": false,
+    // "isBuffering": false,
+    // "isLoaded": true,
+    // "isLooping": false,
+    // "isMuted": false,
+    // "isPlaying": false,
+    // "pitchCorrectionQuality": "Varispeed",
+    // "playableDurationMillis": 1693224,
+    // "positionMillis": 2327, // this is what we could use to scrub
+    // "progressUpdateIntervalMillis": 500,
+    // "rate": 1,
+    // "shouldCorrectPitch": false,
+    // "shouldPlay": false,
+    // "uri": "https://www.listennotes.com/e/p/ea09b575d07341599d8d5b71f205517b/",
+    // "volume": 1,
+// }

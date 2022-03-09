@@ -18,7 +18,7 @@ export default SearchBar = ({ navigation }) => {
         if (query === '') return;
         try {
             const searchResults = await apiCall(query);
-            console.log(searchResults);
+            // console.log(searchResults);
             setResults(searchResults);
             setLoading(false);
             setError(false);
