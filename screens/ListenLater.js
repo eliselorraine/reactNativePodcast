@@ -1,11 +1,9 @@
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { add } from '../utils/redux/listSlice';
+import { useSelector } from 'react-redux';
 import Podcast from '../components/Podcast';
 
 export default ListenLater = ({ navigation }) => { 
     const list = useSelector(state => state.list);
-    const dispatch = useDispatch();
 
     const renderItem = ({ item }) => {
         return (

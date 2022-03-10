@@ -11,6 +11,7 @@ export default EpisodeTitle = ({ width, title }) => {
                 tagsStyles={{
                     p: {
                         marginLeft: 10,
+                        marginRight: 10,
                         fontSize: 18,
                         fontWeight: 'bold',
                     },

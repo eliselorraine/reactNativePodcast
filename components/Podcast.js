@@ -1,15 +1,19 @@
-import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { 
+    Image, 
+    StyleSheet, 
+    View, 
+    useWindowDimensions
+} from 'react-native';
 import HTML from 'react-native-render-html';
 import AudioPlayer from './AudioPlayer';
 import EpisodeTitle from './EpisodeTitle';
+import { MaterialIcons, Entypo } from '@expo/vector-icons';
+
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { add, remove } from '../utils/redux/listSlice';
-import { Entypo } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons'; 
-import { useEffect, useState } from 'react';
 
 export default Podcast = ({ item, navigation }) => {
-    // const location = navigation.getState().routes[1].name;
     const [added, setAdded] = useState(false);
 
     const id = item.id;
@@ -35,8 +39,8 @@ export default Podcast = ({ item, navigation }) => {
         dispatch(add(obj))
     }
 
-    const removeFromList = (podcastToRemove) => {
-        dispatch(remove(podcastToRemove))
+    const removeFromList = (obj) => {
+        dispatch(remove(obj))
         setAdded(false);
     }
 
@@ -52,28 +56,39 @@ export default Podcast = ({ item, navigation }) => {
                 navigation={navigation}
                 id={id}
             />
+            <View style={styles.imageStyle}>
+                <Image
+                    style={StyleSheet.absoluteFill}
+                    source={{ uri: thumbnail }}
+                />
+            </View>
             <View style={styles.btnContainer}>
-                {added ? 
-                <MaterialIcons.Button 
-                    name="playlist-add-check" 
-                    onPress={() => removeFromList(item)}
-                    size={30} 
-                    color="#147efb"
-                    backgroundColor="transparent"
-                    underlayColor="transparent"
-                    activeOpacity={0.7}
+                <AudioPlayer
+                    length={audioLength}
+                    audio={audio}
+                    item={item}
                 />
-                :
-                <MaterialIcons.Button
-                    title='add to list"'
-                    onPress={() => addToList(item)}
-                    name="playlist-add"
-                    size={30}
-                    color="#147efb"
-                    backgroundColor="transparent"
-                    underlayColor="transparent"
-                    activeOpacity={0.7}
-                />
+                {added ?
+                    <MaterialIcons.Button
+                        name="playlist-add-check"
+                        onPress={() => removeFromList(item)}
+                        size={30}
+                        color="#147efb"
+                        backgroundColor="transparent"
+                        underlayColor="transparent"
+                        activeOpacity={0.7}
+                    />
+                    :
+                    <MaterialIcons.Button
+                        title='add to list"'
+                        onPress={() => addToList(item)}
+                        name="playlist-add"
+                        size={30}
+                        color="#147efb"
+                        backgroundColor="transparent"
+                        underlayColor="transparent"
+                        activeOpacity={0.7}
+                    />
                 }
                 <Entypo.Button
                     name="dots-three-vertical"
@@ -85,17 +100,6 @@ export default Podcast = ({ item, navigation }) => {
                     onPress={details}
                 />
             </View>
-            <View style={styles.imageStyle}>
-                <Image
-                    style={StyleSheet.absoluteFill}
-                    source={{ uri: thumbnail }}
-                />
-            </View>
-            <AudioPlayer
-                length={audioLength}
-                audio={audio}
-                item={item}
-            />
             <HTML
                 contentWidth={width}
                 source={{ html: `<p>${description}</p>` }}
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
     },
     btnContainer: {
-        flex: 1, 
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
