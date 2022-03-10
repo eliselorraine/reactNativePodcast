@@ -1,82 +1,90 @@
-import { Image, StyleSheet, View, useWindowDimensions, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
+import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
 import HTML from 'react-native-render-html';
-import { Audio } from 'expo-av';
 import AudioPlayer from './AudioPlayer';
 import EpisodeTitle from './EpisodeTitle';
+import { useSelector, useDispatch } from 'react-redux';
+import { add, remove } from '../utils/redux/listSlice';
+import { Entypo } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'; 
+import { useEffect, useState } from 'react';
 
-// three dots icon, which could either add to your listening list, or see podcast details
+export default Podcast = ({ item, navigation }) => {
+    // const location = navigation.getState().routes[1].name;
+    const [added, setAdded] = useState(false);
 
-export default Podcast = ({ id, navigation, title, thumbnail, description, audio, audioLength }) => {
-    const [sound, setSound] = useState(new Audio.Sound());
-    const [error, setError] = useState(null);
-    const [playing, setPlaying] = useState(false);
-
-    const setup = async () => {
-        Audio.setAudioModeAsync({
-            allowsRecordingIOS: false,
-            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-            playsInSilentModeIOS: true,
-            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-            shouldDuckAndroid: true,
-            staysActiveInBackground: true,
-            playsThroughEarpieceAndroid: true,
-        })
-    }
-
-    useEffect(() => {
-        setup()
-    }, [])
-
-    const playSound = async () => {
-        const status = {
-            shouldPlay: false,
-        }
-
-        const source = {
-            uri: audio,
-            overrideFileExtensionAndroid: '.mp3',
-        }
-
-        try {
-            const loadStatus = await sound.getStatusAsync();
-
-            if (loadStatus.isLoaded) {
-                await sound.playAsync();
-                setPlaying(true);
-                console.log(loadStatus);
-                return;
-            }
-
-            await sound.loadAsync(source, status, false);
-            await sound.playAsync();
-            setPlaying(true);
-        } catch (e) {
-            console.log(e.message);
-            setError(true);
-        }
-    }
-
-    const pauseSound = async () => {
-        try {
-            await sound.pauseAsync();
-            setPlaying(false);
-        } catch (e) {
-            console.log(e.message);
-            setError(true);
-        }
-    }
+    const id = item.id;
+    const title = item.title_highlighted;
+    const thumbnail = item.thumbnail;
+    const description = item.description_highlighted;
+    const audio = item.audio;
+    const audioLength = item.audio_length_sec;
+    const list = useSelector(state => state.list);
+    const dispatch = useDispatch();
 
     const { width } = useWindowDimensions();
 
+    useEffect(() => {
+        const isAdded = list.find(podcast => podcast.id === id);
+        if (isAdded) {
+            setAdded(true);
+            return;
+        }
+    });
+
+    const addToList = (obj) => {
+        dispatch(add(obj))
+    }
+
+    const removeFromList = (podcastToRemove) => {
+        dispatch(remove(podcastToRemove))
+        setAdded(false);
+    }
+
+    const details = () => {
+        navigation.navigate('Podcast Details', { id });
+    }
+
     return (
         <View>
-            <EpisodeTitle 
+            <EpisodeTitle
                 title={title}
                 width={width}
                 navigation={navigation}
                 id={id}
             />
+            <View style={styles.btnContainer}>
+                {added ? 
+                <MaterialIcons.Button 
+                    name="playlist-add-check" 
+                    onPress={() => removeFromList(item)}
+                    size={30} 
+                    color="#147efb"
+                    backgroundColor="transparent"
+                    underlayColor="transparent"
+                    activeOpacity={0.7}
+                />
+                :
+                <MaterialIcons.Button
+                    title='add to list"'
+                    onPress={() => addToList(item)}
+                    name="playlist-add"
+                    size={30}
+                    color="#147efb"
+                    backgroundColor="transparent"
+                    underlayColor="transparent"
+                    activeOpacity={0.7}
+                />
+                }
+                <Entypo.Button
+                    name="dots-three-vertical"
+                    size={24}
+                    color="#147efb"
+                    backgroundColor="transparent"
+                    underlayColor="transparent"
+                    activeOpacity={0.7}
+                    onPress={details}
+                />
+            </View>
             <View style={styles.imageStyle}>
                 <Image
                     style={StyleSheet.absoluteFill}
@@ -84,10 +92,9 @@ export default Podcast = ({ id, navigation, title, thumbnail, description, audio
                 />
             </View>
             <AudioPlayer
-                playSound={playSound}
-                pauseSound={pauseSound}
-                playing={playing}
                 length={audioLength}
+                audio={audio}
+                item={item}
             />
             <HTML
                 contentWidth={width}
@@ -108,6 +115,12 @@ const styles = StyleSheet.create({
     imageStyle: {
         aspectRatio: 1,
     },
+    btnContainer: {
+        flex: 1, 
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    }
 })
 
 

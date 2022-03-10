@@ -1,9 +1,69 @@
 // import Slider from '@react-native-community/slider';
-import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, View, Text } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Audio } from 'expo-av';
+import { AntDesign } from '@expo/vector-icons';
 
-export default AudioPlayer = ({ length, playing, pauseSound, playSound }) => {
-    
+export default AudioPlayer = ({ length, item, audio }) => {
+    const [sound, setSound] = useState(new Audio.Sound());
+    const [error, setError] = useState(null);
+    const [playing, setPlaying] = useState(false);
+
+    const setup = async () => {
+        Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+            playsInSilentModeIOS: true,
+            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
+            shouldDuckAndroid: true,
+            staysActiveInBackground: true,
+            playsThroughEarpieceAndroid: true,
+        })
+    }
+
+    useEffect(() => {
+        setup()
+    }, [])
+
+    const playSound = async (a) => {
+        const status = {
+            shouldPlay: false,
+        }
+
+        const source = {
+            uri: a,
+            overrideFileExtensionAndroid: '.mp3',
+        }
+
+        try {
+            const loadStatus = await sound.getStatusAsync();
+
+            if (loadStatus.isLoaded) {
+                await sound.playAsync();
+                setPlaying(true);
+                console.log(loadStatus);
+                return;
+            }
+
+            await sound.loadAsync(source, status, false);
+            await sound.playAsync();
+            setPlaying(true);
+        } catch (e) {
+            console.log(e.message);
+            setError(true);
+        }
+    }
+
+    const pauseSound = async () => {
+        try {
+            await sound.pauseAsync();
+            setPlaying(false);
+        } catch (e) {
+            console.log(e.message);
+            setError(true);
+        }
+    }
+
     const convertSeconds = (ms) => {
         const minutes = Math.floor(ms / 60);
         let seconds = ms % 60 ? ms % 60 : '00';
@@ -20,7 +80,7 @@ export default AudioPlayer = ({ length, playing, pauseSound, playSound }) => {
                 <View>
                     <AntDesign.Button
                         title='play sound'
-                        onPress={playSound}
+                        onPress={() => playSound(audio)}
                         name="playcircleo"
                         size={30}
                         color="#147efb"

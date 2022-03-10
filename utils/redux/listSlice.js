@@ -6,10 +6,14 @@ export const listSlice = createSlice({
     reducers: {
         add: (state, action) => {
             state.push(action.payload)
+        },
+        remove: (state, action) => {
+            const indexToRemove = state.indexOf(action.payload);
+            state.splice(indexToRemove, 1);
         }
     }
 })
 
-export const { add } = listSlice.actions;
+export const { add, remove } = listSlice.actions;
 
 export default listSlice.reducer;

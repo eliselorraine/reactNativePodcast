@@ -25,7 +25,7 @@ export default PodcastDetails = ({ navigation }) => {
 
     useEffect(() => {
         getPodcastInfo();
-        console.log(data);
+        console.log('I am coming from PodcastDetails.js');
     }, [])
 
     return (

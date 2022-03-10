@@ -1,37 +1,51 @@
-import { View, Text, StyleSheet, Button } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { add } from '../utils/redux/listSlice';
+import Podcast from '../components/Podcast';
 
-const fakePodcast = {
-    id: 1, 
-    title: 'Fake Podcast',
-    description: 'Here is a fake podcast description',
-}
-
-export default ListenLater = () => {
+export default ListenLater = ({ navigation }) => { 
     const list = useSelector(state => state.list);
     const dispatch = useDispatch();
 
-    const addToList = () => {
-        dispatch(add(fakePodcast))
-        console.log(list);
+    const renderItem = ({ item }) => {
+        return (
+            <View>
+                <Podcast
+                    item={item}
+                    navigation={navigation}
+                />
+            </View>
+        )
     }
-    
+
+    if (list.length === 0) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.text}>Your list is empty! Search podcasts to add episodes for later listening.</Text>
+            </View>
+        )
+    }
     return (
-        <View style={styles.container}>
-            <Text>I am your listening list</Text>
-            <Button
-                title='add something'
-                onPress={addToList}
+        <SafeAreaView>
+            <FlatList
+                data={list}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
             />
-        </View>
+        </SafeAreaView>
     )
-}  
+}
+
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, 
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    text: {
+        paddingHorizontal: 10,
+        fontSize: 18,
+        textAlign: 'center',
+    },
 })

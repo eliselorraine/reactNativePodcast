@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { 
-    SafeAreaView, 
-    FlatList, 
-    Text, 
-    View, 
-    StyleSheet, 
+import {
+    SafeAreaView,
+    FlatList,
+    Text,
+    View,
+    StyleSheet,
     ActivityIndicator
 } from 'react-native';
 import Podcast from '../components/Podcast';
@@ -37,13 +37,7 @@ export default PodcastList = ({ navigation }) => {
         return (
             <View>
                 <Podcast
-                    id={item.id}
-                    title={item.title_highlighted}
-                    thumbnail={item.thumbnail}
-                    description={item.description_highlighted}
-                    audio={item.audio}
-                    publisher={item.podcast.publisher_highlighted}
-                    audioLength={item.audio_length_sec}
+                    item={item}
                     navigation={navigation}
                 />
             </View>
