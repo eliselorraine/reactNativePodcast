@@ -7,14 +7,10 @@ import {
     StyleSheet,
     FlatList,
     Image,
-    Dimensions,
 } from 'react-native';
-
-let windowWidth; 
 
 export default PodcastDetails = ({ navigation }) => {
     const id = navigation.getState().routes[2].params.id;
-    windowWidth = Dimensions.get('window').width;
 
     const [data, setData] = useState([]);
     const [episodes, setEpisodes] = useState([]);
@@ -24,7 +20,6 @@ export default PodcastDetails = ({ navigation }) => {
     const getPodcastInfo = async () => {
         try {
             const podcastDetails = await fetchPodcastDetails(id);
-            console.log(podcastDetails);
             setData(podcastDetails);
             setEpisodes(podcastDetails.episodes)
             setLoading(false);
@@ -41,31 +36,32 @@ export default PodcastDetails = ({ navigation }) => {
 
     const renderItem = ({ item }) => {
         return (
-            <View>
-                {/* <View style={styles.titleContainer}> */}
-                    {/* <Image
-                        style={styles.thumbnails}
-                        source={{ uri: item.thumbnail }}
-                    /> */}
-                    <Text style={styles.episodeTitle}>
+            <SafeAreaView style={styles.episodeContainer}>
+                <Image
+                    style={styles.imageStyle}
+                    source={{ uri: item.thumbnail }}
+                />
+                <View>
+                    <Text
+                        numberOfLines={2}
+                        ellipsizeMode='tail'
+                        style={styles.episodeTitle}>
                         {item.title}
                     </Text>
-                {/* </View> */}
-                <AudioPlayer
-                    length={item.audio_length_sec}
-                    audio={item.audio}
-                />
-            </View>
+                    <AudioPlayer
+                        length={item.audio_length_sec}
+                        audio={item.audio}
+                    />
+                </View>
+            </SafeAreaView>
         )
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <View>
-                <Text>
-                    {data.description}
-                </Text>
-            </View>
+            <Text style={styles.description}>
+                {data.description}
+            </Text>
             <FlatList
                 data={episodes}
                 renderItem={renderItem}
@@ -80,23 +76,30 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 4,
+        marginHorizontal: 10,
+    },
+    description: {
+        fontSize: 16,
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    episodeContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignContent: 'center',
+        alignItems: 'center',
         borderTopColor: "#147efb",
         borderTopWidth: StyleSheet.hairlineWidth,
-    },
-    titleContainer: {
-        flex: 1, 
-        flexDirection: 'row',
-        width: windowWidth,
-
     },
     episodeTitle: {
         fontWeight: 'bold',
         fontSize: 15,
         padding: 4,
+        overflow: 'hidden',
     },
-    thumbnails: {
+    imageStyle: {
         aspectRatio: 1,
-        width: 40,
+        width: 60,
     }
+
 })
