@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Audio } from 'expo-av';
 import { AntDesign } from '@expo/vector-icons';
 
-export default AudioPlayer = ({ length, item, audio }) => {
+export default AudioPlayer = ({ length, audio }) => {
     const [sound, setSound] = useState(new Audio.Sound());
     const [error, setError] = useState(null);
     const [playing, setPlaying] = useState(false);

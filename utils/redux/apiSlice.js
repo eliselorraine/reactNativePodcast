@@ -1,23 +1,35 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiCall } from '../api';
 
-const fetchPodcasts = createAsyncThunk(
-    'data/fetchByQuery',
-    async (query, thunkAPI) => {
-        const response = await apiCall(query)
-        return response.results;
+export const fetchPodcasts = createAsyncThunk(
+    'podcasts/fetchPodcasts',
+    async (obj) => {
+        return apiCall(obj.query)
+            .then(res => res.results)
+            // .then(data => console.log(data.results))
+            .catch(console.log(e.message));
     }
 )
 
 const apiSlice = createSlice({
-    name: 'data',
-    initialState: { entities: [], loading: 'idle' },
-    reducers: {
-
+    name: 'podcasts',
+    initialState: {
+        podcasts: [],
+        status: null,
     },
-    extraReducers: (builder) => {
-        builder.addCase(fetchPodcasts.fulfilled, (state, action) => {
-            state.entities.push(action.payload);
-        })
-    }
+    extraReducers: {
+        [fetchPodcasts.pending]: (state, action) => {
+            state.status = 'loading';
+        },
+        [fetchPodcasts.fulfilled]: (state, { payload }) => {
+            state.podcasts = payload;
+            console.log(payload);
+            state.status = 'success';
+        },
+        [fetchPodcasts.rejected]: (state, action) => {
+            state.status = 'error';
+        },
+    },
 })
+
+export default apiSlice.reducer;

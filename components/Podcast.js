@@ -66,7 +66,7 @@ export default Podcast = ({ item, navigation }) => {
                 <AudioPlayer
                     length={audioLength}
                     audio={audio}
-                    item={item}
+                    // item={item}
                 />
                 {added ?
                     <MaterialIcons.Button

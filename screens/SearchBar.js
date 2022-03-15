@@ -6,30 +6,21 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import Logo from '../components/Logo';
-import { apiCall } from '../utils/api';
+
 
 export default SearchBar = ({ navigation }) => {
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const handleSubmit = async () => {
         if (query === '') return;
         try {
-            const searchResults = await apiCall(query);
-            setResults(searchResults);
-            setLoading(false);
-            setError(false);
             navigation.navigate('Results', { query });
         } catch (e) {
             console.log(e.message);
-            setLoading(false);
             setError(true);
         }
     }
-
-    // error handling for both 'no search results' and 'technical difficulties'
 
     return (
         <View style={styles.container}>
