@@ -2,19 +2,22 @@ import { fetchPodcastDetails } from "../utils/api";
 import { useEffect, useState } from "react";
 import {
     SafeAreaView,
-    View,
     Text,
     StyleSheet,
     FlatList,
-    Image,
+    Dimensions,
+    ActivityIndicator,
+    View,
 } from 'react-native';
+import PlaylistPodcast from "../components/PlaylistPodcast";
 
 export default PodcastDetails = ({ navigation }) => {
     const id = navigation.getState().routes[2].params.id;
+    const screenWidth = Dimensions.get('screen').width;
 
     const [data, setData] = useState([]);
     const [episodes, setEpisodes] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const getPodcastInfo = async () => {
@@ -36,70 +39,65 @@ export default PodcastDetails = ({ navigation }) => {
 
     const renderItem = ({ item }) => {
         return (
-            <SafeAreaView style={styles.episodeContainer}>
-                <Image
-                    style={styles.imageStyle}
-                    source={{ uri: item.thumbnail }}
-                />
-                <View>
-                    <Text
-                        numberOfLines={2}
-                        ellipsizeMode='tail'
-                        style={styles.episodeTitle}>
-                        {item.title}
-                    </Text>
-                    <AudioPlayer
-                        length={item.audio_length_sec}
-                        audio={item.audio}
-                    />
-                </View>
-            </SafeAreaView>
+            <PlaylistPodcast
+                item={item}
+            />
         )
     }
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.description}>
-                {data.description}
-            </Text>
-            <FlatList
-                data={episodes}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-            />
-        </SafeAreaView>
-    )
+    if (!loading && !error) {
+        return (
+            <SafeAreaView style={
+                {
+                    width: screenWidth,
+                    flex: 1,
+                }
+            }>
+                <Text style={styles.description}>
+                    {data.description}
+                </Text>
+                <FlatList
+                    data={episodes}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
+                />
+            </SafeAreaView>
+        )
+    } else if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" />
+            </View>
+        )
+    } else if (error) {
+        return (
+            <View style={styles.error}>
+                <Text style={styles.text}>Sorry, it looks like we are having technical difficulties. Please try again later.</Text>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 10,
-    },
     description: {
         fontSize: 16,
         marginTop: 10,
         marginBottom: 10,
+        marginLeft: 10,
     },
-    episodeContainer: {
+    container: {
         flex: 1,
-        flexDirection: 'row',
+        justifyContent: 'center',
         alignContent: 'center',
-        alignItems: 'center',
-        borderTopColor: "#147efb",
-        borderTopWidth: StyleSheet.hairlineWidth,
     },
-    episodeTitle: {
-        fontWeight: 'bold',
-        fontSize: 15,
-        padding: 4,
-        overflow: 'hidden',
+    error: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        paddingHorizontal: 30,
     },
-    imageStyle: {
-        aspectRatio: 1,
-        width: 60,
+    text: {
+        fontSize: 18,
+        textAlign: 'center',
     }
-
 })

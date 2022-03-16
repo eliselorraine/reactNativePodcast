@@ -17,9 +17,9 @@ export default Podcast = ({ item, navigation }) => {
     const [added, setAdded] = useState(false);
 
     const id = item.id;
-    const title = item.title_highlighted;
+    const title = item.title_highlighted || item.title;
     const thumbnail = item.thumbnail;
-    const description = item.description_highlighted;
+    const description = item.description_highlighted || item.description;
     const audio = item.audio;
     const audioLength = item.audio_length_sec;
     const list = useSelector(state => state.list);
@@ -66,7 +66,6 @@ export default Podcast = ({ item, navigation }) => {
                 <AudioPlayer
                     length={audioLength}
                     audio={audio}
-                    // item={item}
                 />
                 {added ?
                     <MaterialIcons.Button

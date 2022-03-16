@@ -9,13 +9,9 @@ import {
 } from 'react-native';
 import Podcast from '../components/Podcast';
 import { apiCall } from '../utils/api';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { fetchPodcasts } from '../utils/redux/apiSlice'
 
 export default PodcastList = ({ navigation }) => {
     const query = navigation.getState().routes[1].params.query;
-
-    // const dispatch = useDispatch();
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -35,9 +31,6 @@ export default PodcastList = ({ navigation }) => {
 
     useEffect(() => {
         getPodcasts();
-        // dispatch(fetchPodcasts({ query: test }));
-        // setLoading(false);
-        // console.log(fetched.podcasts);
     }, []);
 
     const renderItem = ({ item }) => {
