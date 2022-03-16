@@ -8,8 +8,8 @@ export const listSlice = createSlice({
             state.push(action.payload)
         },
         remove: (state, action) => {
-            const indexToRemove = state.indexOf(action.payload);
-            state.splice(indexToRemove, 1);
+            const updatedList = state.filter(podcast => podcast.id !== action.payload.id);
+            return updatedList;
         }
     }
 })
