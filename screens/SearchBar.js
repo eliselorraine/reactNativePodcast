@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import Logo from '../components/Logo';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default SearchBar = ({ navigation }) => {
@@ -24,16 +25,18 @@ export default SearchBar = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Logo />
-            <Text style={styles.text}>Search through episodes by topic:</Text>
-            <TextInput
-                style={styles.input}
-                placeholder='Enter topic or keyword...'
-                onChangeText={newQuery => setQuery(newQuery)}
-                defaultValue={query}
-                onSubmitEditing={handleSubmit}
-                returnKeyType='search'
-            />
+            <LinearGradient colors={['#71B280', '#134E5E']} style={styles.linearGradient}>
+                <Logo />
+                <Text style={styles.text}>Search through episodes by topic:</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder='Enter topic or keyword...'
+                    onChangeText={newQuery => setQuery(newQuery)}
+                    defaultValue={query}
+                    onSubmitEditing={handleSubmit}
+                    returnKeyType='search'
+                />
+            </LinearGradient>
         </View>
     )
 }
@@ -48,10 +51,24 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
         marginTop: 10,
+        color: '#ffffff',
+    },
+    linearGradient: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
     },
     input: {
         height: 40,
         textAlign: 'center',
         fontSize: 18,
+        backgroundColor: '#ffffff',
+        marginVertical: 20,
+        marginHorizontal: 70,
+        borderRadius: 20,
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+
     }
 })

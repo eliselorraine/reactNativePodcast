@@ -10,6 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.2.2",
     "@expo/vector-icons": "^12.0.0",
     "@react-native-community/slider": "4.1.12",
     "@react-navigation/bottom-tabs": "^6.2.0",
@@ -18,6 +19,8 @@
     "@reduxjs/toolkit": "^1.8.0",
     "expo": "~44.0.0",
     "expo-av": "~10.2.0",
+    "expo-font": "~10.0.4",
+    "expo-linear-gradient": "~11.0.3",
     "expo-status-bar": "~1.2.0",
     "podcast-api": "^1.1.1",
     "react": "17.0.1",

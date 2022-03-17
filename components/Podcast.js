@@ -125,24 +125,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 })
-
-
-// const statusObj = {
-    // "didJustFinish": false,
-    // "durationMillis": 1693224,
-    // "hasJustBeenInterrupted": false,
-    // "isBuffering": false,
-    // "isLoaded": true,
-    // "isLooping": false,
-    // "isMuted": false,
-    // "isPlaying": false,
-    // "pitchCorrectionQuality": "Varispeed",
-    // "playableDurationMillis": 1693224,
-    // "positionMillis": 2327, // this is what we could use to scrub
-    // "progressUpdateIntervalMillis": 500,
-    // "rate": 1,
-    // "shouldCorrectPitch": false,
-    // "shouldPlay": false,
-    // "uri": "https://www.listennotes.com/e/p/ea09b575d07341599d8d5b71f205517b/",
-    // "volume": 1,
-// }
